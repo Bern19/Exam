@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html>
+    <style>
+        #container {
+            position: relative;
+            width: 60%;
+            height: 100%;
+            margin: 0 auto;
+            top: 200px;
+            background-color: rgb(212, 212, 212) ;
+        }
+    </style>
+    <!-- Scripts -->
+    <script type="text/javascript" src="/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="/bootstrap/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/datatable/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="/datatable-select/dataTables.select.min.js"></script>
+    <script type="text/javascript" src="/datatable-buttons/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" src="/datatable-responsive/dataTables.responsive.min.js"></script>
+
+    <!-- StyleSheets -->
+    <link rel="stylesheet" type="text/css" href="/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/datatable-dt/jquery.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="/datatable-select-dt/select.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="/datatable-buttons-dt/buttons.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="/datatable-responsive-dt/responsive.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="/font-awesome/font-awesome.min.css">
+    <head>
+        <title>Users Table</title>
+    </head>
+    <nav class="navbar navbar-expand-lg bg-light">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/crud">Home</a>
+                
+            </ul>
+            <form class="d-flex" role="button">
+                <button class="btn btn-outline-success btnLogout" type="button">Logout</button>
+            </form>
+            </div>
+        </div>
+    </nav>
+    <body>
+        <div id="container">
+            <table class="table tblcrud">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>User ID</th>
+                        <th style="display:none"> Uuid</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Address</th>
+                        <th>Postal Code</th>
+                        <th>Phone Number</th>
+                        <th>Email</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+
+        <div class="modal fade modal-lg" id="modAddUser" role="dialog">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button class="close fa fa-times" type="button" data-bs-dismiss="modal"></button>
+                  <h4 class="modal-title w-100 text-center">
+                    <p>Add User</p>
+                  </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group col-md-4">
+                          <label for="lblobjlevel">User ID:</label>
+                          <input type="text" class="form-control" id="txtUserId" placeholder="0">
+                        </div>
+                        <div class="form-group col-md-4">
+                          <label>First Name:</label>
+                          <input class="form-control" id="txtFirstName" type="text" placeholder="Juan">
+                        </div>
+                        <div class="form-group col-md-4">
+                          <label>Last Name:</label>
+                          <input class="form-control" id="txtLastName" type="text"  placeholder="Dela Cruz">
+                        </div>
+                        <div class="form-group col-md-12">
+                          <label>Address:</label>
+                          <textarea class="form-control" style="resize:none" id="txtAddress" placeholder="Manila"></textarea>
+                        </div>
+                        <div class="form-group col-md-4">
+                          <label>Postal Code:</label>
+                          <input class="form-control" id="txtPostCode" type="text" placeholder="1000">
+                        </div>
+                        <div class="form-group col-md-4">
+                          <label>Mobile Number:</label>
+                          <input class="form-control" id="txtMobile" type="text"  placeholder="09991234567">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label>Email Address:</label>
+                            <input class="form-control" id="txtEmail" type="text"  placeholder="sample@gmail.com">
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 alert-alert-default">
+                                <br>
+                                <h4>User Credentials</h4>
+                                <hr/>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="form-group col-md-6">
+                                <label>Username:</label>
+                                <input class="form-control" id="txtUsername" type="text"  placeholder="user1">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>Password:</label>
+                                <input class="form-control" id="txtPassword" type="password"  placeholder="****">
+                            </div>
+                          </div>
+                          
+                          
+                      </div>
+                </div>
+                <div class="modal-footer"><a class="btn btn-success modAddUserOk" href="#" role="button">Add</a>
+                  <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Cancel</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal fade" id="modEditUser" role="dialog">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button class="close fa fa-times" type="button" data-bs-dismiss="modal"></button>
+                  <h4 class="modal-title w-100 text-center">
+                    <p>Edit User</p>
+                  </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="form-group col-md-4">
+                              <label>User ID:</label>
+                              <input type="text" class="form-control" id="txtUserId2" placeholder="0" disabled>
+                            </div>
+                            <div class="form-group col-md-4">
+                              <label>First Name:</label>
+                              <input class="form-control" id="txtFirstName2" type="text" placeholder="Juan">
+                            </div>
+                            <div class="form-group col-md-4">
+                              <label>Last Name:</label>
+                              <input class="form-control" id="txtLastName2" type="text"  placeholder="Dela Cruz">
+                            </div>
+                            <div class="form-group col-md-12">
+                              <label>Address:</label>
+                              <textarea class="form-control" style="resize:none" id="txtAddress2" placeholder="Manila"></textarea>
+                            </div>
+                            <div class="form-group col-md-4">
+                              <label>Postal Code:</label>
+                              <input class="form-control" id="txtPostCode2" type="text" placeholder="1000">
+                            </div>
+                            <div class="form-group col-md-4">
+                              <label>Mobile Number:</label>
+                              <input class="form-control" id="txtMobile2" type="text"  placeholder="09991234567">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>Email Address:</label>
+                                <input class="form-control" id="txtEmail2" type="text"  placeholder="sample@gmail.com">
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-12 alert-alert-default">
+                                    <br>
+                                    <h4>User Credentials</h4>
+                                    <hr/>
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Username:</label>
+                                    <input class="form-control" id="txtUsername2" type="text"  placeholder="user1">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Password:</label>
+                                    <input class="form-control" id="txtPassword2" type="password"  placeholder="****">
+                                </div>
+                              </div>
+                          </div>
+                    </div>
+                </div>
+                <div class="modal-footer"><a class="btn btn-success modEditUserOk" href="#" role="button">Edit</a>
+                  <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Cancel</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal fade" id="modDeleteUser" role="dialog">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button class="close fa fa-times" type="button" data-bs-dismiss="modal"></button>
+                  <h4 class="modal-title w-100 text-center">
+                    <p>Delete</p>
+                  </h4>
+                </div>
+                <div class="modal-body">
+                  <p>Are you sure you want to delete this User?</p>
+                </div>
+                <div class="modal-footer"><a class="btn btn-success modDeleteUserOk" href="#" role="button">Delete</a>
+                  <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Cancel</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="modal fade" id="modLogout" role="dialog">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button class="close fa fa-times" type="button" data-bs-dismiss="modal"></button>
+                  <h4 class="modal-title w-100 text-center">
+                    <p>Logout</p>
+                  </h4>
+                </div>
+                <div class="modal-body">
+                  <p>Are you sure you want to logout?</p>
+                </div>
+                <div class="modal-footer"><a class="btn btn-success modLogoutOk" href="#" role="button">OK</a>
+                  <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Cancel</button>
+                </div>
+              </div>
+            </div>
+          </div>
+    </body>
+</html>
+<script>
+
+    $(document).ready(function(){
+
+        console.log("CRUD PAGE");
+
+
+        //variables for table data
+        var glUserId    = '';
+        var glUuid      = '';
+        var glFirstName = '';
+        var glLastName  = '';
+        var glAddress   = '';
+        var glPostCode  = '';
+        var glMobile    = '';
+        var glEmail     = '';
+
+        //declare variable for datatable
+        var table;
+
+
+        //use variable to initialize datatable
+        table = $(".tblcrud").DataTable({
+            "destroy": true,
+            "processing": true,
+            "select": true,
+            //"serverSide": true,
+            "dom": 'Bfrtip',
+            "responsive": true,
+            "ajax": {
+                "url": "/crud/getUsers",
+                "type": "GET",
+                "datatype": "text",
+                
+            },
+
+            "columns": [
+                { data: 'userid'},
+                { data: 'uuid', visible: false},
+                { data: 'firstname' },
+                { data: 'lastname' },
+                { data: 'address' },
+                { data: 'postcode'},
+                { data: 'mobileno' },
+                { data: 'email' },
+                { data: 'actions'}
+                
+            ],
+
+            buttons: [
+            {
+                text: 'Add User',
+                action: function () {
+
+
+                    $('#modAddUser').modal({backdrop: 'static', keyboard: false})  
+                    $('#modAddUser').modal('show');
+
+                }
+            }
+            ]
+
+        });
+
+        //Click event for table
+        $('.tblcrud tbody').on('click', 'tr', function(){
+
+            var selectData = table.row(this).data();
+
+            console.log(selectData);
+
+            glUserId       = selectData.userid;
+            glUuid         = selectData.uuid;
+            glFirstName    = selectData.firstname;
+            glLastName     = selectData.lastname;
+            glAddress      = selectData.address;
+            glPostCode     = selectData.postcode;
+            glMobile       = selectData.mobile;
+            glEmail        = selectData.email;
+
+
+        });
+
+        $('.modAddUserOk').click(function(){
+
+            var lvUserId = $('#txtUserId').val();
+            var lvFirstName = $('#txtFirstName').val();
+            var lvLastName = $('#txtLastName').val();
+            var lvAddress = $('#txtAddress').val();
+            var lvPostCode = $('#txtPostCode').val();
+            var lvMobile = $('#txtMobile').val();
+            var lvEmail = $('#txtEmail').val();
+            var lvUsername = $('#txtUsername').val();
+            var lvPassword = $('#txtPassword').val();
+
+            if(lvUserId){
+
+                $.ajax({
+                url: '/crud/addUser',
+                method: 'POST',
+                datatype: 'text',
+                data: {
+                    userid: lvUserId,
+                    firstname: lvFirstName,
+                    lastname: lvLastName,
+                    address: lvAddress,
+                    postcode: lvPostCode,
+                    mobile: lvMobile,
+                    email: lvEmail,
+                    username: lvUsername,
+                    password: lvPassword
+                    
+                },
+                success: function(data){
+                    alert('Successfully added user ' + lvUserId + ': ' + lvFirstName + ' ' + lvLastName);
+                    table.ajax.reload();
+                    $('#modAddUser').modal('toggle');
+                },
+
+                error: function(jqXHR, exception){
+                    var msg = '';
+                    if (jqXHR.status === 0) {
+                        msg = 'Not connect.\n Verify Network.';
+                    } else if (jqXHR.status == 400) {
+                        msg = 'Bad Request. Something went wrong. [400]';
+                    } else if (jqXHR.status == 404) {
+                        msg = 'Requested page not found. [404]';
+                    } else if (jqXHR.status == 500) {
+                        msg = 'Internal Server Error [500].';
+                    } else if (exception === 'parsererror') {
+                        msg = 'Requested JSON parse failed.';
+                    } else if (exception === 'timeout') {
+                        msg = 'Time out error.';
+                    } else if (exception === 'abort') {
+                        msg = 'Ajax request aborted.';
+                    } else {
+                        msg = 'Uncaught Error.\n' + jqXHR.responseText;
+                    }
+                    alert(msg);
+                }
+
+            });
+
+            } else {
+
+                alert('Please enter a User ID!');
+
+            }
+
+            
+
+        });
+
+
+        $('.tblcrud').on('click', '.rowEdit', function(){
+
+            $.ajax({
+                url: '/crud/getUserInfo',
+                method: 'POST',
+                datatype: 'text',
+                data: {
+                    uuid: glUuid
+                },
+                success: function(data){
+
+                    console.log(data)
+
+                    $('#txtUserId2').val(data.data[0].userid);
+                    $('#txtFirstName2').val(data.data[0].firstname);
+                    $('#txtLastName2').val(data.data[0].lastname);
+                    $('#txtAddress2').val(data.data[0].address);
+                    $('#txtPostCode2').val(data.data[0].postcode);
+                    $('#txtMobile2').val(data.data[0].mobileno);
+                    $('#txtEmail2').val(data.data[0].email);
+                    $('#txtUsername2').val(data.data[0].username);
+                    $('#txtPassword2').val(data.data[0].password);
+
+                    $('#modEditUser').modal({backdrop: 'static', keyboard: false}) 
+                    $('#modEditUser').modal('show');
+
+                }
+            });
+        });
+
+
+        $('.modEditUserOk').click(function(){
+
+            var lvUserId = $('#txtUserId2').val();
+            var lvUuid = glUuid;
+            var lvFirstName = $('#txtFirstName2').val();
+            var lvLastName = $('#txtLastName2').val();
+            var lvAddress = $('#txtAddress2').val();
+            var lvPostCode = $('#txtPostCode2').val();
+            var lvMobile = $('#txtMobile2').val();
+            var lvEmail = $('#txtEmail2').val();
+            var lvUsername = $('#txtUsername2').val();
+            var lvPassword = $('#txtPassword2').val();
+
+            if(lvUserId){
+
+                $.ajax({
+                url: '/crud/editUserInfo',
+                method: 'POST',
+                datatype: 'text',
+                data: {
+                    userid: lvUserId,
+                    uuid: lvUuid,
+                    firstname: lvFirstName,
+                    lastname: lvLastName,
+                    address: lvAddress,
+                    postcode: lvPostCode,
+                    mobile: lvMobile,
+                    email: lvEmail,
+                    username: lvUsername,
+                    password: lvPassword
+                    
+                },
+                success: function(data){
+                    alert('Successfully edited user information ' + lvUserId + ': ' + lvFirstName + ' ' + lvLastName);
+                    table.ajax.reload();
+                    $('#modEditUser').modal('toggle');
+                },
+
+                error: function(jqXHR, exception){
+                    var msg = '';
+                    if (jqXHR.status === 0) {
+                        msg = 'Not connect.\n Verify Network.';
+                    } else if (jqXHR.status == 400) {
+                        msg = 'Bad Request. Something went wrong. [400]';
+                    } else if (jqXHR.status == 404) {
+                        msg = 'Requested page not found. [404]';
+                    } else if (jqXHR.status == 500) {
+                        msg = 'Internal Server Error [500].';
+                    } else if (exception === 'parsererror') {
+                        msg = 'Requested JSON parse failed.';
+                    } else if (exception === 'timeout') {
+                        msg = 'Time out error.';
+                    } else if (exception === 'abort') {
+                        msg = 'Ajax request aborted.';
+                    } else {
+                        msg = 'Uncaught Error.\n' + jqXHR.responseText;
+                    }
+                    alert(msg);
+                }
+
+            });
+
+            } else {
+
+                alert('Please enter a User ID!');
+
+            }
+
+
+
+            });
+
+
+        $('.tblcrud').on('click', '.rowDelete', function(){
+
+            
+
+            $('#modDeleteUser').modal({backdrop: 'static', keyboard: false}) 
+            $('#modDeleteUser').modal('show');
+
+        });
+
+
+        $('.modDeleteUserOk').click(function(){
+
+            var lvUuid = glUuid;
+
+
+                $.ajax({
+                url: '/crud/deleteUser',
+                method: 'POST',
+                datatype: 'text',
+                data: {
+                    uuid: lvUuid,
+                    
+                },
+                success: function(data){
+                    alert('Successfully deleted user');
+                    table.ajax.reload();
+                    $('#modDeleteUser').modal('toggle');
+                },
+
+                error: function(jqXHR, exception){
+                    var msg = '';
+                    if (jqXHR.status === 0) {
+                        msg = 'Not connect.\n Verify Network.';
+                    } else if (jqXHR.status == 400) {
+                        msg = 'Bad Request. Something went wrong. [400]';
+                    } else if (jqXHR.status == 404) {
+                        msg = 'Requested page not found. [404]';
+                    } else if (jqXHR.status == 500) {
+                        msg = 'Internal Server Error [500].';
+                    } else if (exception === 'parsererror') {
+                        msg = 'Requested JSON parse failed.';
+                    } else if (exception === 'timeout') {
+                        msg = 'Time out error.';
+                    } else if (exception === 'abort') {
+                        msg = 'Ajax request aborted.';
+                    } else {
+                        msg = 'Uncaught Error.\n' + jqXHR.responseText;
+                    }
+                    alert(msg);
+                }
+
+            });
+        });
+
+
+        $('.btnLogout').click(function(){
+
+            $('#modLogout').modal({backdrop: 'static', keyboard: false}) 
+            $('#modLogout').modal('show');
+
+        })
+
+        $('.modLogoutOk').click(function(){
+
+           $.ajax({
+                url: '/logout',
+                method: 'POST',
+                success: function(){
+                    window.location.href = '/';
+                },
+                error: function(jqXHR, exception){
+                    var msg = '';
+                    if (jqXHR.status === 0) {
+                        msg = 'Not connect.\n Verify Network.';
+                    } else if (jqXHR.status == 400) {
+                        msg = 'Bad Request. Something went wrong. [400]';
+                    } else if (jqXHR.status == 404) {
+                        msg = 'Requested page not found. [404]';
+                    } else if (jqXHR.status == 500) {
+                        msg = 'Internal Server Error [500].';
+                    } else if (exception === 'parsererror') {
+                        msg = 'Requested JSON parse failed.';
+                    } else if (exception === 'timeout') {
+                        msg = 'Time out error.';
+                    } else if (exception === 'abort') {
+                        msg = 'Ajax request aborted.';
+                    } else {
+                        msg = 'Uncaught Error.\n' + jqXHR.responseText;
+                    }
+                    alert(msg);
+                }
+           });
+
+        });
+
+    });
+    
+
+</script>

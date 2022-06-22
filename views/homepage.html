@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+    <style>
+        body {
+            background: rgb(255, 255, 255) }
+        
+        #login {
+            background: rgb(27, 26, 26);
+            color: white;
+            border-radius: 1em;
+            padding: 1em;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-right: -50%;
+            transform: translate(-50%, -50%) }
+      </style>
+    <!-- Scripts -->
+    <script type="text/javascript" src="/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="/bootstrap/bootstrap.min.js"></script>
+
+    <!-- StyleSheets -->
+    <link rel="stylesheet" href="/bootstrap/bootstrap.min.css">
+    <head>
+        <title>Login</title>
+    </head>
+    <body>
+        <div class="container">
+            <form id="login">
+                <div class="mb-3">
+                    <p><center>Login</p></center>
+                </div>
+                <div class="mb-3">
+                  <label for="inputUsername" class="form-label">Username</label>
+                  <input type="text" class="form-control" name="inputUsername" id="inputUsername" aria-describedby="usernameHelp">
+                </div>
+                <div class="mb-3">
+                  <label for="inputPassword" class="form-label">Password</label>
+                  <input type="password" class="form-control" name="inputPassword" id="inputPassword">
+                </div>
+                <button type="button" class="btn btn-primary form-control btnLogin">Login</button>
+              </form>
+
+        </div>
+    </body>
+</html>
+<script>
+    $(document).ready(function(){
+        console.log("FIRST PAGE");
+
+
+        $('.btnLogin').click(function(){
+            
+            $.ajax({
+                url: "/",
+                method: "POST",
+                dataType: "text",
+                data: {
+                    "username": $('#inputUsername').val(),
+                    "password": $('#inputPassword').val()
+                },
+            
+                success: function(data){
+                    console.log('OK');
+                    window.location.href = "/crud";
+                }, 
+                error: function(jqXHR, exception){
+                    var msg = '';
+                    if (jqXHR.status === 0) {
+                        msg = 'Not connect.\n Verify Network.';
+                    } else if (jqXHR.status == 400) {
+                        msg = 'Bad Request. Something went wrong. [400]';
+                    } else if (jqXHR.status == 404) {
+                        msg = 'Requested page not found. [404]';
+                    } else if (jqXHR.status == 500) {
+                        msg = 'Internal Server Error [500].';
+                    } else if (exception === 'parsererror') {
+                        msg = 'Requested JSON parse failed.';
+                    } else if (exception === 'timeout') {
+                        msg = 'Time out error.';
+                    } else if (exception === 'abort') {
+                        msg = 'Ajax request aborted.';
+                    } else {
+                        msg = 'Uncaught Error.\n' + jqXHR.responseText;
+                    }
+                    alert(msg);
+                }
+                
+            });
+      })
+    
+    });
+</script>
